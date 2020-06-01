@@ -1,0 +1,6 @@
+C:\Users\Никита\source\repos\602\602\bin\Debug\602.exe.config
+C:\Users\Никита\source\repos\602\602\bin\Debug\602.exe
+C:\Users\Никита\source\repos\602\602\bin\Debug\602.pdb
+C:\Users\Никита\source\repos\602\602\obj\Debug\602.csprojAssemblyReference.cache
+C:\Users\Никита\source\repos\602\602\obj\Debug\602.exe
+C:\Users\Никита\source\repos\602\602\obj\Debug\602.pdb

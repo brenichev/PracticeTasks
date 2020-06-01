@@ -1,0 +1,6 @@
+C:\Users\Никита\source\repos\674\674\bin\Debug\674.exe.config
+C:\Users\Никита\source\repos\674\674\bin\Debug\674.exe
+C:\Users\Никита\source\repos\674\674\bin\Debug\674.pdb
+C:\Users\Никита\source\repos\674\674\obj\Debug\674.csprojAssemblyReference.cache
+C:\Users\Никита\source\repos\674\674\obj\Debug\674.exe
+C:\Users\Никита\source\repos\674\674\obj\Debug\674.pdb
