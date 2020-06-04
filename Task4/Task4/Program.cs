@@ -6,58 +6,53 @@ using System.Threading.Tasks;
 
 namespace Task4
 {
-    class Program
+    public class Program
     {
+        public static double func(double x)
+        {            
+            return (x + Math.Log(x + 0.5) - 0.5);
+        }
+
+        public static double res(double xn, double xk, double eps)
+        {
+            double xi = 0;
+            while (xk - xn > eps)
+            {
+                double dx = (xk - xn) / 2;
+                xi = xn + dx;
+                if (func(xn) * func(xk) < 0)
+                    xk = xi;
+                else
+                    xn = xi;
+            }
+            return xi;
+        }
         static void Main(string[] args)
         {
-            int i = 0;
-            double[,] matrix = new double[9, 9];
-            int[,] matrix2 = new int[9, 9];
+            double eps = 0;
             bool check = true;
             do
             {
-                Console.WriteLine("Введите строку матрицы с номером " + (i + 1));
-                string[] row = Console.ReadLine().Split(' ');
-                check = true;
-                int j = 0;
-                if (row.Length != 9)
-                    Console.WriteLine("Элементов в строке должно быть 9, введено = " + row.Length);
-                else
-                {
-                    while (check && j < 9)
-                    {
-                        check = double.TryParse(row[j], out matrix[i, j]);
-                        j++;
-                    }
-                    if(check)
-                    i++;
-                }
+                Console.WriteLine("Введите точность вычисления: ");
+                check = double.TryParse(Console.ReadLine(), out eps);
                 if (!check)
-                    Console.WriteLine("У элемента с номером " + j + " неверный тип данных");
-            } while (i < 9);
+                    Console.WriteLine("Неверный формат числа");
+            } while (!check);
 
-            Console.WriteLine();
-            Console.WriteLine("=== Введенная матрица: ===");
-            for (int t = 0; t < 9; t++)
-            {
-                for (int f = 0; f < 9; f++)
-                    Console.Write(matrix[t, f] + " ");
-                Console.WriteLine();
-            }
 
-            Console.WriteLine();
-            Console.WriteLine("=== Результат: ===");
-            for (int t = 0; t < 9; t++)
+            double xn, xk, xi;
+            xn = 0;
+            xk = 2;
+            xi = 0;
+            if (func(xn) == 0)
+                Console.WriteLine("Корень уравнения = " + xn);
+            else
+            if(func(xk) == 0)
+                Console.WriteLine("Корень уравнения = " + xk);
+            else
             {
-                for (int f = 0; f < 9; f++)
-                {
-                    if (matrix[t, f] > matrix[t, t])
-                        matrix2[t, f] = 1;
-                    else
-                        matrix2[t, f] = 0;
-                    Console.Write(matrix2[t, f] + " ");
-                }
-                Console.WriteLine();
+                xi = res(xn, xk, eps);
+                Console.WriteLine("Корень уравнения = " + xi + " с точностью по y = " + eps);
             }
         }
     }
