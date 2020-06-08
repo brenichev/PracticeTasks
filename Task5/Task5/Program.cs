@@ -25,11 +25,10 @@ namespace Task5
         }
 
         [ExcludeFromCodeCoverage]
-        static void Main(string[] args)
+        public static double[,] ReadMatrix()
         {
             int i = 0;
             double[,] matrix = new double[9, 9];
-            int[,] matrix2 = new int[9, 9];
             bool check = true;
             do
             {
@@ -52,7 +51,17 @@ namespace Task5
                 if (!check)
                     Console.WriteLine("У элемента с номером " + j + " неверный тип данных");
             } while (i < 9);
+            return matrix;
+        }
 
+        [ExcludeFromCodeCoverage]
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Задание №5");
+            double[,] matrix = new double[9, 9];
+            int[,] matrix2 = new int[9, 9];
+
+            matrix = ReadMatrix();
             Console.WriteLine();
             Console.WriteLine("=== Введенная матрица: ===");
             for (int t = 0; t < 9; t++)
@@ -63,7 +72,6 @@ namespace Task5
             }
 
             Console.WriteLine();
-            StreamWriter sw = new StreamWriter("OUTPUT.TXT");
             Console.WriteLine("=== Результат: ===");
 
             res(matrix, ref matrix2);
@@ -72,35 +80,7 @@ namespace Task5
                 for (int f = 0; f < 9; f++)
                     Console.Write(matrix2[t, f] + " ");
                 Console.WriteLine();
-            }
-            /*for (int t = 0; t < 9; t++)
-            {
-                sw.Write("{ ");
-                for (int f = 0; f < 9; f++)
-                {
-                    sw.Write(matrix[t, f] + ", ");
-                }
-                //Console.WriteLine();
-                sw.Write(" }, ");
-            }
-            sw.WriteLine();
-            for (int t = 0; t < 9; t++)
-            {
-                sw.Write("{ ");
-                for (int f = 0; f < 9; f++)
-                {
-                    if (matrix[t, f] > matrix[t, t])
-                        matrix2[t, f] = 1;
-                    else
-                        matrix2[t, f] = 0;
-                   // Console.Write(matrix2[t, f] + " ");
-                    sw.Write(matrix2[t, f] + ", ");
-                }
-                //Console.WriteLine();
-                sw.Write(" }, ");
-            }
-            sw.Close();*/
-
+            }            
         }
     }
 }

@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Task6
 {
-    class Program
+    public class Program
     {
-        static void Sequence(ref double[] a, int N, int last)
+        public static void Sequence(ref double[] a, int N, int last)
         {
             if (last < N)
                 a[last] = 13 * a[last - 1] - 10 * a[last - 2] + a[last - 3];
@@ -17,8 +18,18 @@ namespace Task6
             last++;
             Sequence(ref a, N, last);
         }
+
+        [ExcludeFromCodeCoverage]
         static void Main(string[] args)
         {
+            int origWidth = Console.WindowWidth * 2;
+            int origHeight = Console.WindowHeight * 2;
+            Console.SetWindowSize(origWidth, origHeight);
+
+            Console.WriteLine("Задание №6. Ввести а1, а2, а3, N. Построить последовательность чисел ак = 13*а(к – 1) – 10*а(к-2) + а(к–3).");
+            Console.WriteLine("Построить N элементов последовательности проверить, образуют ли элементы, стоящие на четных местах, возрастающую подпоследовательность.");
+            Console.WriteLine("Для выхода введите -1");
+            Console.WriteLine();
             bool check = true;
             int N = 0;
             double[] a = new double[3];
@@ -56,26 +67,31 @@ namespace Task6
             int last = 3;
             Array.Resize(ref a, N);
             Sequence(ref a, N, last);
+            Console.WriteLine();
 
             int i = 1;
             bool grow = true;
             while (grow != false && i < N)
             {
-                if (a[i] < 0)
-                    grow = false;
-                else
-                    if (i + 2 < N)
-                    i = i + 2;
-                else
-                    i = N;
+                if (i + 2 < N)
+                {
+                    if (a[i] > a[i + 2])
+                        grow = false;
+                    i += 2;
+                }
+                else i = N;
             }
-            Console.WriteLine(a[N - 1]);
+
+            for (int j = 0; j < N; j++)
+                Console.Write(a[j] + " ");
+
+            Console.WriteLine();
             if (grow)
                 Console.WriteLine("Элементы, стоящие на четных местах образуют возрастающую последовательность");
             else
-                Console.WriteLine("Элементы, стоящие на четных местах не образуют возрастающую последовательность");
+                Console.WriteLine("Элементы, стоящие на четных местах НЕ образуют возрастающую последовательность");
 
-
+            Console.ReadLine();
         }
     }
 }

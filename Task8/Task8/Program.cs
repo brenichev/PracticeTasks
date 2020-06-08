@@ -67,37 +67,62 @@ namespace Task8
             Console.ForegroundColor = ConsoleColor.Gray; Console.BackgroundColor = ConsoleColor.Black;
             return current;
         }
-        static bool IsTree(int[,] a)
+        public static int Start(int[,] arr)
         {
-            if (a.GetLength(1) - a.GetLength(0) != 1)
+            int start = arr.GetLength(0) - 1;
+            int[] check = new int[arr.GetLength(0)];
+            for (int i = 0; i < arr.GetLength(1); i++)
+                for (int j = 0; j < arr.GetLength(0); j++)
+                    if (arr[j, i] == 1)
+                        check[j]++;
+            if (check[start] == 0)
+                return -1;
+            for (int i = 0; i < check.GetLength(0); i++)
+                if (check[start] > check[i])
+                    if (check[start] == 0)
+                        return -1;
+                    else
+                        start = i;
+            return start;
+
+        }
+        public static void dfs(int t, bool[] Checked, int k, int r, int[,] arr, int i, int j, ref int cycle) //обход в глубину
+        {
+            if(t != -1)
             {
-                bool[] Checked = new bool[a.GetLength(0)];
-                Checked[0] = true;
-                for (int j = 0; j < a.GetLength(0); j++)
+                Checked[t] = true;
+                int n = arr.GetLength(0);
+                int m = arr.GetLength(1);
+                int p;
+
+                for (i = k; i < n; i++)
                 {
-                    for (int i = 0; i < a.GetLength(1); i++)
+                    j = r;
+                    if ((arr[i, j] != 0) && (!Checked[i]))
                     {
-                        if (a[j, i] == 1)
+                        Checked[i] = true;
+                        p = i;
+
+                        cycle++;
+
+                        for (j = 0; j < m; j++)
                         {
-                            for (int k = 0; k < a.GetLength(0); k++)
+                            if (arr[i, j] != 0)
                             {
-                                if (a[k, i] == 1) { Checked[k] = true; }
+                                r = j;
+
+                                for (k = 0; k < n; k++)
+                                {
+
+                                    if ((arr[k, j] != 0) && (!Checked[k]))
+                                    {
+                                        dfs(i, Checked, k, r, arr, i, j, ref cycle);
+                                    }
+                                }
                             }
                         }
                     }
                 }
-                for (int i = 0; i < Checked.Length; i++)
-                {
-                    if (Checked[i] == false)
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
-            else
-            {
-                return false;
             }
         }
 
@@ -156,45 +181,103 @@ namespace Task8
                 Console.WriteLine();
             }
         }
+        public static int ReadInt(int left = 0, int right = 100, string message = "")
+        {
+            Console.WriteLine(message);
+            bool ok = false;
+            int number = 0;
+            do
+            {
+                try
+                {
+                    number = int.Parse(Console.ReadLine());
+                    if (number >= left && number <= right) ok = true;
+                    else
+                    {
+                        Console.WriteLine($"=== Неверно введено число. Введите число большее {left} и меньшее {right} ===");
+                        ok = false;
+                    }
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("=== Введено не целое число. Введите целое число. ===");
+                    ok = false;
+                }
+                catch (OverflowException)
+                {
+                    Console.WriteLine($"=== Неверно введено число. Введите число большее {left} и меньшее {right} ===");
+                    ok = false;
+                }
+            } while (!ok);
+            return number;
+        }
+
         static void Main(string[] args)
         {
             int n = 5, m = 6;
             //int[,] a = new int[,] { { 0, 0, 1, 1, 0, 1 }, { 0, 0, 0, 1, 0, 0 }, { 1, 0, 0, 0, 1, 1 }, { 1, 1, 0, 0, 0, 0 }, { 0, 1, 1, 0, 1, 0 } };
             //int[,] a = new int[6, 5] { { 1, 0, 0, 0, 0 }, { 0, 1, 0, 0, 0 }, { 1, 1, 1, 0, 0 }, { 0, 0, 0, 1, 0 }, { 0, 0, 1, 1, 1 }, { 0, 0, 0, 0, 1 } };
-            //int[,] a = new int[7, 6] { { 1, 0, 0, 0, 0, 0 }, { 0, 1, 0, 0, 0, 0 }, { 1, 1, 1, 0, 0, 0 }, { 0, 0, 0, 1, 0, 1 }, { 0, 0, 1, 1, 1, 0 }, { 0, 0, 0, 0, 1, 1 }, { 0, 0, 0, 0, 0, 0 } };
-            int[,] a = new int[,] { { 0, 0, 1, 1, 1, 0 }, { 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 1, 1, 0 }, { 1, 0, 1, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0 } };
+            int[,] a = new int[7, 6] { { 1, 0, 0, 0, 0, 0 }, { 0, 1, 0, 0, 0, 0 }, { 1, 1, 1, 0, 0, 0 }, { 0, 0, 0, 1, 0, 1 }, { 0, 0, 1, 1, 1, 0 }, { 0, 0, 0, 0, 1, 1 }, { 0, 0, 0, 0, 0, 0 } };
+            //int[,] a = new int[,] { { 1, 1, 0, 0, 0 }, { 0, 1, 1, 1, 0 }, { 0, 0, 1, 0, 1 }, { 0, 0, 0, 1, 1 }, { 1, 0, 0, 0, 0 } };
+
+            //int[,] a = new int[,] { { 1, 1, 0, 0 }, { 0, 1, 1, 1 }, { 0, 0, 1, 0 }, { 0, 0, 0, 1 }, { 1, 0, 0, 0} };
             bool f = false;
-            for (int i = 0; i < a.GetLength(0); i++)
+
+
+
+
+            for (int x = 0; x < a.GetLength(0); x++)
             {
-                for (int j = 0; j < a.GetLength(1); j++)
-                    Console.Write(a[i, j] + " ");
+                for (int y = 0; y < a.GetLength(1); y++)
+                    Console.Write(a[x, y] + " ");
                 Console.WriteLine();
             }
             Console.WriteLine(a.GetLength(1));
             Console.WriteLine(a.GetLength(0));
+
             bool check = false;
+            int k = 0;
+            int r = 0;
+            int i = 0;
+            int j = 0;
+            int cycle = 0;
+            bool[] Checked = new bool[a.GetLength(0)];
+
             do
             {
+                k = 0;
+                r = 0;
+                i = 0;
+                j = 0;
+                cycle = 0;
+                Checked = new bool[a.GetLength(0)];
+
                 switch (Menu())
                 {
 
                     case 0:
                         Console.CursorTop += 3;
-                        a = RandomGraph(5);
-                        Show(a);
-                        Console.WriteLine();
-                        if (IsTree(a))
-                            Console.WriteLine("Дерево");
-                        else
-                            Console.WriteLine("Не дерево");
-                        Console.ReadLine();
+                        int num = ReadInt(1, 100, "Введите количество вершин");
+                        a = RandomGraph(num);
                         break;
                     case 1:
+                        Console.CursorTop += 3;
                         break;
                     case 2:
                         check = true;
                         break;
                 }
+
+                Checked = new bool[a.GetLength(0)];
+                Show(a);
+                Console.WriteLine();
+                dfs(Start(a), Checked, k, r, a, i, j, ref cycle);
+                if (a.GetLength(1) == cycle)
+                    Console.WriteLine("Дерево");
+                else
+                    Console.WriteLine("Не дерево");
+                Console.ReadLine();
+
             } while (!check);
         }
     }

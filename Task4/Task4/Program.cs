@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,14 +10,14 @@ namespace Task4
     public class Program
     {
         public static double func(double x)
-        {            
+        {
             return (x + Math.Log(x + 0.5) - 0.5);
         }
 
         public static double res(double xn, double xk, double eps)
         {
             double xi = 0;
-            while (xk - xn > eps)
+            do
             {
                 double dx = (xk - xn) / 2;
                 xi = xn + dx;
@@ -24,36 +25,81 @@ namespace Task4
                     xk = xi;
                 else
                     xn = xi;
-            }
+            } while (xk - xn > eps);
             return xi;
         }
-        static void Main(string[] args)
+
+        public static double MyRound(double x, double eps)
         {
+            int count = 0;
+            while (eps % 10 < 1)
+            {
+                eps *= 10;
+                count++;
+            }
+            if (count > 15)
+                count = 15;
+            return Math.Round(x, count, MidpointRounding.AwayFromZero);
+        }
+
+        [ExcludeFromCodeCoverage]
+        public static void Menu()
+        {
+            Console.Clear();
+            Console.WriteLine("Задание №4. Метод деления отрезка пополам.");
+            Console.WriteLine("x + ln(x + 0.5) - 0.5 = 0, [0,2]");
+            Console.WriteLine("Для выхода введите -1");
+
             double eps = 0;
-            bool check = true;
             do
             {
-                Console.WriteLine("Введите точность вычисления: ");
-                check = double.TryParse(Console.ReadLine(), out eps);
-                if (!check)
-                    Console.WriteLine("Неверный формат числа");
-            } while (!check);
+                bool check = true;
+                do
+                {
+                    Console.WriteLine("Введите точность вычисления: ");
+                    check = double.TryParse(Console.ReadLine(), out eps);
+                    if (!check)
+                        Console.WriteLine("Неверный формат числа");
+                    if (eps < 0 && eps != -1)
+                    {
+                        Console.WriteLine("Введите положительное число");
+                        check = false;
+                    }
+                } while (!check);
 
-
-            double xn, xk, xi;
-            xn = 0;
-            xk = 2;
-            xi = 0;
-            if (func(xn) == 0)
-                Console.WriteLine("Корень уравнения = " + xn);
-            else
-            if(func(xk) == 0)
-                Console.WriteLine("Корень уравнения = " + xk);
-            else
+                if (eps != -1)
+                {
+                    double xn, xk, xi;
+                    xn = 0;
+                    xk = 2;
+                    xi = 0;
+                    if (func(xn) == 0)
+                        Console.WriteLine("Корень уравнения = " + xn);
+                    else
+                    if (func(xk) == 0)
+                        Console.WriteLine("Корень уравнения = " + xk);
+                    else
+                    {
+                        
+                        xi = res(xn, xk, eps / 10);
+                        Console.WriteLine("Корень уравнения = " + MyRound(xi, eps) + " с точностью по y = " + eps + ", точное значение = " + xi);
+                    }
+                }
+            } while (eps != -1);
+        }
+        
+        [ExcludeFromCodeCoverage]
+        static void Main(string[] args)
+        {
+            try
             {
-                xi = res(xn, xk, eps);
-                Console.WriteLine("Корень уравнения = " + xi + " с точностью по y = " + eps);
+                Menu();
             }
+            catch
+            {
+                Console.WriteLine("Было введено слишком большое число");
+            }
+
         }
     }
 }

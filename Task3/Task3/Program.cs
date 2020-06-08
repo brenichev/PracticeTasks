@@ -1,32 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Task3
 {
-    class Program
+    public class Program
     {
+        public static double Function(double a)
+        {
+            if (a < 1)
+                return a;
+            else
+                if (a >= 1 && a <= 2)
+                return 1;
+            else
+                return -2 * a + 5;
+        }
+
+        [ExcludeFromCodeCoverage]
         static void Main(string[] args)
         {
             double a = 0;
-            Console.WriteLine("Введите действительное число");
-            bool check = double.TryParse(Console.ReadLine(), out a);
-
-            while(check == false)
+            bool check = true;
+            do
             {
                 Console.WriteLine("Введите действительное число");
                 check = double.TryParse(Console.ReadLine(), out a);
-            }
+                if (!check) Console.WriteLine("Введено неправильное число");
+            } while (!check);
 
-            if (a < 1)
-                Console.WriteLine(a);
-            else
-                if (a >= 1 && a <= 2)
-                Console.WriteLine(1);
-            else
-                Console.WriteLine(-2 * a + 5);
+            Console.WriteLine(Function(a));
         }
     }
 }
