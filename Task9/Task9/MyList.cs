@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace Task9
 {
     public class MyList
     {
+        [ExcludeFromCodeCoverage]
         public class Point
         {
             public int Data { get; set; }
@@ -53,6 +55,7 @@ namespace Task9
             end = null;
         }
 
+        [ExcludeFromCodeCoverage]
         public void Show()
         {
             if (Count == 0)
@@ -78,6 +81,7 @@ namespace Task9
                 return RemoveKey(beg, i);            
         }
 
+        [ExcludeFromCodeCoverage]
         public void RemoveAt2(int i)
         {
             if (i < 0) Console.WriteLine(" === Номер элемента не может быть отрицательным === ");
@@ -87,6 +91,7 @@ namespace Task9
                 Remove2(i);
         }
 
+        [ExcludeFromCodeCoverage]
         public void Remove2(int num)
         {
             if (num == 0)
@@ -118,6 +123,7 @@ namespace Task9
             if (find.Next == beg)
                 if (beg.Data == num)
                 {
+                    beg = find.Next.Next;
                     find.Next = find.Next.Next;
                     Count--;
                     return true;

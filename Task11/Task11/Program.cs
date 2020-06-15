@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Task11
 {
-    class Program
+    public class Program
     {
+        [ExcludeFromCodeCoverage]
         static void Main(string[] args)
         {
             Grid grid = new Grid();

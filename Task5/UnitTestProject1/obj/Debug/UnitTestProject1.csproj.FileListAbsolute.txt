@@ -17,3 +17,4 @@ C:\Users\Никита\source\repos\Task5\UnitTestProject1\obj\Debug\UnitTestProj
 C:\Users\Никита\source\repos\Task5\UnitTestProject1\obj\Debug\UnitTestProject1.csproj.CopyComplete
 C:\Users\Никита\source\repos\Task5\UnitTestProject1\obj\Debug\UnitTestProject1.dll
 C:\Users\Никита\source\repos\Task5\UnitTestProject1\obj\Debug\UnitTestProject1.pdb
+C:\Users\Никита\source\repos\Task5\UnitTestProject1\obj\Debug\UnitTestProject1.csproj.CoreCompileInputs.cache

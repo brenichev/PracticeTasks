@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Task12
 {
-    class Program
+    public class Program
     {
-        static void SortArr(ref int[,] arr, int i, int first, int last, ref int colComparBlock, ref int colTransBlock)
+        public static void SortArr(ref int[,] arr, int i, int first, int last, ref int colComparBlock, ref int colTransBlock)
         {
             int L, R, c, x;
             colComparBlock++;
@@ -22,13 +23,11 @@ namespace Task12
                     colComparBlock++;
                     while (arr[i, L] < x)
                     {
-                        colComparBlock++;
                         L++;
                     }
                     colComparBlock++;
                     while (arr[i, R] > x)
                     {
-                        colComparBlock++;
                         R--;
                     }
                     colComparBlock++;
@@ -47,15 +46,15 @@ namespace Task12
             }
         }
 
-        static void BlockSort(ref int[] a, ref int colComparBlock, ref int colTransBlock)
+        public static void BlockSort(ref int[] a, ref int colComparBlock, ref int colTransBlock)
         {
             int max = 0;
             for (int i = 0; i < a.Length; i++)
                 if (a[i] > max)
                     max = a[i];
-            int[,] b = new int[max, a.Length];
+            int[,] b = new int[max + a.Length, a.Length];
             int[] exist = new int[a.Length];
-            int[] Sizes = new int[max];
+            int[] Sizes = new int[max + exist.Length];
             for (int i = 0; i < a.Length; i++)
             {
                 colTransBlock += 2;
@@ -79,7 +78,7 @@ namespace Task12
                 }
         }
 
-        static void SelectionSort(ref int[] a, ref int colComparSelect, ref int colTransSelect)
+        public static void SelectionSort(ref int[] a, ref int colComparSelect, ref int colTransSelect)
         {
             int i, j, min, temp;
             for (i = 0; i < a.Length - 1; i++)
@@ -101,6 +100,7 @@ namespace Task12
             }
         }
 
+        [ExcludeFromCodeCoverage]
         public static void ReadArray(ref int[] array)
         {
             int i = 0;
@@ -127,13 +127,14 @@ namespace Task12
             } while (!check);
         }
 
+        [ExcludeFromCodeCoverage]
         static void Main(string[] args)
         {
             int origWidth = Console.WindowWidth * 2;
             int origHeight = Console.WindowHeight * 2;
             //Console.BufferWidth += 10;
             Console.SetWindowSize(origWidth, origHeight);
-            int n = 0;
+            int n = 1000;
             int colComparBlock = 0;
             int colTransBlock = 0;
             int colComparSelect = 0;
@@ -141,18 +142,25 @@ namespace Task12
 
             int[] a = new int[n];
 
-            bool check = false;
+            /*bool check = false;
             do
             {
                 Console.WriteLine("Введите количество элементов");
                 check = int.TryParse(Console.ReadLine(), out n);
-            } while (!check);
+            } while (!check);*/
+            Console.WriteLine("Сортировка массива упорядоченного по возрастанию");
+            Random rnd = new Random();
+            for(int i = 0; i < n; i++)
+            {
+                if (i == 0)
+                    a[i] = rnd.Next(1, 25);
+                else
+                    a[i] = a[i - 1] + rnd.Next(1, 25);
+            }
 
-            a = new int[n];
             //ReadArray(ref a);
 
             int[] a2 = new int[n];
-            a = new int[] { 9587, 8818, 1491, 7903, 600, 2062, 2584, 5546, 3946, 2770, 8766, 1265, 9895, 79, 76, 2898, 8653, 1638, 512, 8793, 8315, 9630, 8588, 1310, 7455, 6766, 8766, 558, 5240, 9652, 8498, 4827, 8469, 9989, 2729, 9069, 2050, 5313, 4615, 5996, 8082, 3381, 7260, 7977, 3459, 7336, 874, 2112, 8974, 1386, 905, 7288, 1015, 9492, 8598, 8470, 6258, 7363, 9027, 1498, 7015, 7524, 6324, 5484, 7512, 9053, 4553, 9562, 4365, 9167, 5558, 2447, 2548, 2818, 423, 6007, 153, 1296, 8118, 9126, 2681, 9022, 6414, 3696, 8514, 5011, 2165, 4771, 2374, 1192, 6268, 9389, 8716, 2592, 4872, 6228, 1644, 9424, 5789, 6009 };
             a2 = a;
 
             BlockSort(ref a, ref colComparBlock, ref colTransBlock);
@@ -163,7 +171,41 @@ namespace Task12
             Console.WriteLine("Количество сравнений сортировки выбором = " + colComparSelect);
             Console.WriteLine("Количество пересылок  сортировки выбором = " + colTransSelect);
 
-            for (int i = 0; i < a.Length; i++)
+            for (int i = 0; i < n; i++)
+            {
+                a[i] = a[n - i - 1];
+            }
+
+            a2 = a;
+            Console.WriteLine();
+            Console.WriteLine("Сортировка массива упорядоченного по убыванию");
+            BlockSort(ref a, ref colComparBlock, ref colTransBlock);
+            SelectionSort(ref a2, ref colComparSelect, ref colTransSelect);
+
+            Console.WriteLine("Количество сравнений блочной сортировки = " + colComparBlock);
+            Console.WriteLine("Количество пересылок блочной сортировки = " + colTransBlock);
+            Console.WriteLine("Количество сравнений сортировки выбором = " + colComparSelect);
+            Console.WriteLine("Количество пересылок  сортировки выбором = " + colTransSelect);
+
+            Console.WriteLine();
+            Console.WriteLine("Сортировка неупорядоченного массива");
+            for (int i = 0; i < n; i++)
+            {
+                    a[i] = rnd.Next(0, 10000);
+            }
+
+            a2 = a;
+            Console.WriteLine();
+            Console.WriteLine("Сортировка массива упорядоченного по убыванию");
+            BlockSort(ref a, ref colComparBlock, ref colTransBlock);
+            SelectionSort(ref a2, ref colComparSelect, ref colTransSelect);
+
+            Console.WriteLine("Количество сравнений блочной сортировки = " + colComparBlock);
+            Console.WriteLine("Количество пересылок блочной сортировки = " + colTransBlock);
+            Console.WriteLine("Количество сравнений сортировки выбором = " + colComparSelect);
+            Console.WriteLine("Количество пересылок  сортировки выбором = " + colTransSelect);
+
+            /*for (int i = 0; i < a.Length; i++)//вывод массива a
             {
                 if (i % 10 == 0)
                     Console.WriteLine();
@@ -171,13 +213,13 @@ namespace Task12
             }
 
             Console.WriteLine();
-            for (int i = 0; i < a2.Length; i++)
+            for (int i = 0; i < a2.Length; i++)//вывод массива a2
             {
                 if (i % 10 == 0)
                     Console.WriteLine();
                 Console.Write(a2[i] + " ");
-            }
-                
+            }*/
+
         }
     }
 }

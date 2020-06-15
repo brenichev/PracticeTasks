@@ -4,3 +4,4 @@ C:\Users\Никита\source\repos\Task3\Task3\bin\Debug\Task3.pdb
 C:\Users\Никита\source\repos\Task3\Task3\obj\Debug\Task3.csprojAssemblyReference.cache
 C:\Users\Никита\source\repos\Task3\Task3\obj\Debug\Task3.exe
 C:\Users\Никита\source\repos\Task3\Task3\obj\Debug\Task3.pdb
+C:\Users\Никита\source\repos\Task3\Task3\obj\Debug\Task3.csproj.CoreCompileInputs.cache

@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Task8
 {
-    class Program
+    public class Program
     {
+        [ExcludeFromCodeCoverage]
         static int Menu()
         {
             Console.Clear();
@@ -67,6 +69,7 @@ namespace Task8
             Console.ForegroundColor = ConsoleColor.Gray; Console.BackgroundColor = ConsoleColor.Black;
             return current;
         }
+
         public static int Start(int[,] arr)
         {
             int start = arr.GetLength(0) - 1;
@@ -86,9 +89,10 @@ namespace Task8
             return start;
 
         }
+
         public static void dfs(int t, bool[] Checked, int k, int r, int[,] arr, int i, int j, ref int cycle) //обход в глубину
         {
-            if(t != -1)
+            if (t != -1)
             {
                 Checked[t] = true;
                 int n = arr.GetLength(0);
@@ -126,7 +130,7 @@ namespace Task8
             }
         }
 
-        static int[,] RandomGraph(int n)
+        public static int[,] RandomGraph(int n)
         {
             int[,] b = new int[n, n];
             int[,] a = new int[n, n - 1];
@@ -172,6 +176,7 @@ namespace Task8
             return a;
         }
 
+        [ExcludeFromCodeCoverage]
         static void Show(int[,] a)
         {
             for (int i = 0; i < a.GetLength(0); i++)
@@ -181,6 +186,8 @@ namespace Task8
                 Console.WriteLine();
             }
         }
+
+        [ExcludeFromCodeCoverage]
         public static int ReadInt(int left = 0, int right = 100, string message = "")
         {
             Console.WriteLine(message);
@@ -191,10 +198,10 @@ namespace Task8
                 try
                 {
                     number = int.Parse(Console.ReadLine());
-                    if (number >= left && number <= right) ok = true;
+                    if (number > left && number <= right) ok = true;
                     else
                     {
-                        Console.WriteLine($"=== Неверно введено число. Введите число большее {left} и меньшее {right} ===");
+                        Console.WriteLine($"=== Неверно введено число. Введите число больше {left} и меньше {right} ===");
                         ok = false;
                     }
                 }
@@ -205,36 +212,76 @@ namespace Task8
                 }
                 catch (OverflowException)
                 {
-                    Console.WriteLine($"=== Неверно введено число. Введите число большее {left} и меньшее {right} ===");
+                    Console.WriteLine($"=== Неверно введено число. Введите число больше {left} и меньше {right} ===");
                     ok = false;
                 }
             } while (!ok);
             return number;
         }
 
+        [ExcludeFromCodeCoverage]
+        public static void ReadMatrix(ref int size, ref int[,] a)
+        {            
+            bool check = true;
+            do
+            {
+                Console.WriteLine("Введите количество вершин графа");
+                check = int.TryParse(Console.ReadLine(), out size);
+            } while (!check);
+
+            int[] Nums = new int[size];
+            int i = 0;
+            a = new int[size, size - 1];
+            Console.WriteLine("Введите матрицу инцидентности графа размером " + size + " строк и " + (size - 1) + " столбцов");
+            do
+            {
+                Console.WriteLine("Введите строку матрицы графа с номером " + (i + 1));
+                string[] row = Console.ReadLine().Split(' ');
+                check = true;
+                int j = 0;
+                if (row.Length != size - 1)
+                    Console.WriteLine("Элементов в строке должно быть " + (size - 1) + ", введено = " + row.Length);
+                else
+                {
+                    while (check && j < size - 1)
+                    {
+                        check = int.TryParse(row[j], out a[i, j]);
+                        if (a[i, j] != 0 && a[i, j] != 1)
+                            check = false;
+                        j++;
+                    }
+                    if (check)
+                        i++;
+                }
+                if (!check)
+                    Console.WriteLine("У элемента с номером " + j + " неверный тип данных");
+                //проверка матрицы на лишние 1
+                if(i==size)
+                {
+                    int g = 0;
+                    while(g<size-1 && check)
+                    {
+                        int sum = 0;
+                        for (int f = 0; f < size; f++)
+                            if (a[f, g] == 1)
+                                sum++;
+                        if(sum!=2)
+                        {
+                            check = false;
+                            i = 0;
+                            Console.WriteLine("Неверная матрица инциденций графа");
+                        }
+                        g++;
+                    }
+                }
+            } while (i < size);
+        }
+
+        [ExcludeFromCodeCoverage]
         static void Main(string[] args)
         {
-            int n = 5, m = 6;
-            //int[,] a = new int[,] { { 0, 0, 1, 1, 0, 1 }, { 0, 0, 0, 1, 0, 0 }, { 1, 0, 0, 0, 1, 1 }, { 1, 1, 0, 0, 0, 0 }, { 0, 1, 1, 0, 1, 0 } };
-            //int[,] a = new int[6, 5] { { 1, 0, 0, 0, 0 }, { 0, 1, 0, 0, 0 }, { 1, 1, 1, 0, 0 }, { 0, 0, 0, 1, 0 }, { 0, 0, 1, 1, 1 }, { 0, 0, 0, 0, 1 } };
-            int[,] a = new int[7, 6] { { 1, 0, 0, 0, 0, 0 }, { 0, 1, 0, 0, 0, 0 }, { 1, 1, 1, 0, 0, 0 }, { 0, 0, 0, 1, 0, 1 }, { 0, 0, 1, 1, 1, 0 }, { 0, 0, 0, 0, 1, 1 }, { 0, 0, 0, 0, 0, 0 } };
-            //int[,] a = new int[,] { { 1, 1, 0, 0, 0 }, { 0, 1, 1, 1, 0 }, { 0, 0, 1, 0, 1 }, { 0, 0, 0, 1, 1 }, { 1, 0, 0, 0, 0 } };
-
-            //int[,] a = new int[,] { { 1, 1, 0, 0 }, { 0, 1, 1, 1 }, { 0, 0, 1, 0 }, { 0, 0, 0, 1 }, { 1, 0, 0, 0} };
+            int[,] a = new int[1, 1];
             bool f = false;
-
-
-
-
-            for (int x = 0; x < a.GetLength(0); x++)
-            {
-                for (int y = 0; y < a.GetLength(1); y++)
-                    Console.Write(a[x, y] + " ");
-                Console.WriteLine();
-            }
-            Console.WriteLine(a.GetLength(1));
-            Console.WriteLine(a.GetLength(0));
-
             bool check = false;
             int k = 0;
             int r = 0;
@@ -242,6 +289,7 @@ namespace Task8
             int j = 0;
             int cycle = 0;
             bool[] Checked = new bool[a.GetLength(0)];
+            int num = 1;
 
             do
             {
@@ -257,11 +305,12 @@ namespace Task8
 
                     case 0:
                         Console.CursorTop += 3;
-                        int num = ReadInt(1, 100, "Введите количество вершин");
+                        num = ReadInt(1, 100, "Введите количество вершин");
                         a = RandomGraph(num);
                         break;
                     case 1:
                         Console.CursorTop += 3;
+                        ReadMatrix(ref num, ref a);
                         break;
                     case 2:
                         check = true;

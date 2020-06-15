@@ -59,6 +59,11 @@ namespace Task6
                             }
                         }
                     }
+                    if (N < 3)
+                    {
+                        Console.WriteLine("N не может быть меньше 3");
+                        check = false;
+                    }
                     if (!check)
                         Console.WriteLine("Неверный ввод");
                 }
@@ -82,8 +87,15 @@ namespace Task6
                 else i = N;
             }
 
-            for (int j = 0; j < N; j++)
+            int j = 0;
+            while(j < N && !double.IsNaN(a[j]))
+            {
                 Console.Write(a[j] + " ");
+                j++;
+            }
+            Console.WriteLine("Слишком большие значения в последовательности");
+            if (double.IsNaN(a[j]))
+                Console.WriteLine("Слишком большие значения в последовательности");
 
             Console.WriteLine();
             if (grow)

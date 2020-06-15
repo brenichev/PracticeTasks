@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Task11
 {
-    class Grid
+    public class Grid
     {
         const int n = 10;
         byte[,] grid = new byte[n, n];
         string str = "";
         string[,] matrix = new string[n, n];
 
+        [ExcludeFromCodeCoverage]
         public Grid(byte[,] Grid, string Str)
         {
             grid = Grid;
@@ -81,6 +83,7 @@ namespace Task11
             this.str = strTemp;
         }
 
+        [ExcludeFromCodeCoverage]
         public static void ReadString()
         {
             Console.WriteLine("Введите последовательность из 100 букв для зашифровки");
@@ -93,6 +96,7 @@ namespace Task11
             } while (str.Length != 100);
         }
 
+        [ExcludeFromCodeCoverage]
         public static Grid Read()
         {
             Console.WriteLine("Введите последовательность из 100 букв для зашифровки");
@@ -155,6 +159,8 @@ namespace Task11
             } while (!check);
             return new Grid(grid, str);
         }
+
+        [ExcludeFromCodeCoverage]
         public void Test()
         {
             int count = 0;
@@ -195,6 +201,7 @@ namespace Task11
             this.grid = temp;
         }
 
+        [ExcludeFromCodeCoverage]
         public void Write()
         {
             for (int i = 0; i < n; i++)

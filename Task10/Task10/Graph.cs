@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Task10
 {
-    class Graph
+    public class Graph
     {
         int size;
         byte[,] matrix;
@@ -20,12 +21,22 @@ namespace Task10
             values = Val;
         }
 
+        public byte[,] Matrix {
+            get
+            {
+                return matrix;
+            }
+        }
+
+        [ExcludeFromCodeCoverage]
         public static Graph ReadMatrix()
         {
             int size = 0;
             bool check = true;
+
             do
             {
+                Console.WriteLine("Введите количество вершин графа");
                 check = int.TryParse(Console.ReadLine(), out size);
             } while (!check);
 
@@ -46,12 +57,15 @@ namespace Task10
 
             i = 0;
             byte[,] matrix = new byte[size, size];
+            Console.WriteLine();
+            Console.WriteLine("Введите матрицу смежности графа");
             do
             {
                 Console.WriteLine("Введите строку матрицы графа с номером " + (i + 1));
                 string[] row = Console.ReadLine().Split(' ');
                 check = true;
                 int j = 0;
+
                 if (row.Length != size)
                     Console.WriteLine("Элементов в строке должно быть " + size + ", введено = " + row.Length);
                 else
@@ -59,6 +73,8 @@ namespace Task10
                     while (check && j < size)
                     {
                         check = byte.TryParse(row[j], out matrix[i, j]);
+                        if (matrix[i, j] != 0 && matrix[i, j] != 1)
+                            check = false;
                         j++;
                     }
                     if (check)
@@ -70,6 +86,7 @@ namespace Task10
             return new Graph(size, values, matrix);
         }
 
+        [ExcludeFromCodeCoverage]
         public void WriteMatrix()
         {
             for (int i = 0; i < size; i++)
@@ -80,125 +97,29 @@ namespace Task10
             }
         }
 
-        // Чтение графа из файла
-        public static Graph ReadGraph(string P)
+        public void Constrict(int Val)
         {
-            try
-            {
-                FileStream File = new FileStream(P, FileMode.Open);
-                StreamReader sr = new StreamReader(File);
-                // Размер графа
-                int Size;
-                // Флаг правильности ввода
-                bool ok = Int32.TryParse(sr.ReadLine(), out Size);
-                // Массив значений
-                string vals = sr.ReadLine();
-                int[] Val = new int[Size];
-                if (vals.Length > Size * 2 - 1)
-                    vals = vals.Remove(Size * 2 - 1);
-                Val = vals.Split(' ').Select(n => Int32.Parse(n)).ToArray();
-                // Матрица смежности
-                byte[,] Matrix = new byte[Size, Size];
-                for (int i = 0; i < Size; i++)
-                {
-                    vals = sr.ReadLine();
-                    if (vals.Length > Size * 2 - 1)
-                        vals = vals.Remove(Size * 2 - 1);
-                    // Чтение строки матрицы
-                    byte[] Row = vals.Split(' ').Select(n => Byte.Parse(n)).ToArray();
-                    for (int j = 0; j < Size; j++)
-                    {
-                        if (Row[j] != 0 && Row[j] != 1)
-                        {
-                            Console.WriteLine("В файле содержатся некорректные данные.");
-                            return null;
-                        }
-                        Matrix[i, j] = Row[j];
-                    }
-                }
-
-                sr.Close();
-                File.Close();
-
-                return new Graph(Size, Val, Matrix);
-            }
-            catch
-            {
-                Console.WriteLine("Не удается открыть файл, проверьте его наличие и правильность пути.");
-                return null;
-            }
-        }
-
-        // Запись графа в файл
-        public void WriteGraph(string P)
-        {
-            P = Path.GetDirectoryName(P) + Path.GetFileNameWithoutExtension(P) + "output" + Path.GetExtension(P);
-            FileStream File;
-            try
-            {
-                File = new FileStream(P, FileMode.Truncate);
-            }
-            catch (FileNotFoundException)
-            {
-                File = new FileStream(P, FileMode.CreateNew);
-            }
-            StreamWriter sw = new StreamWriter(File);
-            // Размер графа
-            sw.WriteLine(size);
-            // Массив значений
-            foreach (int item in values)
-                sw.Write(item + " ");
-            sw.WriteLine();
-            // Матрица смежности
-            for (int i = 0; i < size; i++)
-            {
-                for (int j = 0; j < size; j++)
-                    sw.Write(matrix[i, j] + " ");
-                sw.WriteLine();
-            }
-
-            Console.WriteLine("Информация об обработанном графе записана в файл " + P);
-
-            sw.Close();
-            File.Close();
-        }
-
-        // Стягиевание графа
-        public void Contraction(int Val)
-        {
-            // Если искомое значение отсутствует в графе
             if (!values.Contains(Val))
             {
                 Console.WriteLine("В графе нет вершины с указанным значением");
                 return;
             }
-            // Номер вершины, где впервые встречается искомое значение
-            int FirstVertex = Array.IndexOf(values, Val);
+            int FirstV = Array.IndexOf(values, Val);
 
-            int i = FirstVertex + 1;
-            // Проходим по оставшимся вершинам графа
+            int i = FirstV + 1;
             while (i < size)
             {
-                // Если нашлась еще одна вершина с искомым значением
                 if (values[i] == Val)
                 {
-                    // Переносим ребра
-                    // Перенос ребер, исходящих из этой вершины
-                    for (int col = 0; col < size; col++)
-                        // Если из данной вершины исходит ребро (но не в точку, в которую стягиваем, чтобы не было петлей)
-                        if (matrix[i, col] == 1 && col != FirstVertex)
-                            // Переносим начало ребра в вершину, куда стягиваем
-                            matrix[FirstVertex, col] = 1;
+                    for (int col = 0; col < size; col++)//перенос по столбцам
+                        if (matrix[i, col] == 1 && col != FirstV)
+                            matrix[FirstV, col] = 1;
 
-                    // Перенос ребер, входящих в эту вершину
-                    for (int row = 0; row < size; row++)
-                        // Если в данную вершину входит ребро (но не из точки, в которую стягиваем, чтобы не было петлей)
-                        if (matrix[row, i] == 1 && row != FirstVertex)
-                            // Переносим конец ребра в вершину, куда стягиваем
-                            matrix[row, FirstVertex] = 1;
+                    for (int row = 0; row < size; row++)//перенос по строкам
+                        if (matrix[row, i] == 1 && row != FirstV)
+                            matrix[row, FirstV] = 1;
 
-                    // Удаление вершины из графа
-                    RemoveVertex(i);
+                    RemoveV(i);
                 }
                 else
                     i++;
@@ -206,9 +127,8 @@ namespace Task10
         }
 
         // Удаление вершины графа
-        void RemoveVertex(int index)
+        void RemoveV(int index)
         {
-            // Удаление значения
             int[] NewValues = new int[size - 1];
             for (int i = 0; i < index; i++)
                 NewValues[i] = values[i];
@@ -216,18 +136,17 @@ namespace Task10
                 NewValues[i - 1] = values[i];
             values = NewValues;
 
-            // Удаление вершины из матрицы
             byte[,] NewMatrix = new byte[size - 1, size - 1];
 
-            // Копирование незатронутой части
+
             for (int i = 0; i < index; i++)
                 for (int j = 0; j < index; j++)
                     NewMatrix[i, j] = matrix[i, j];
-            // Удаление столбца
+
             for (int i = 0; i < NewMatrix.GetLength(0); i++)
                 for (int j = index; j < NewMatrix.GetLength(1); j++)
                     NewMatrix[i, j] = matrix[i, j + 1];
-            // Удаление строки
+
             for (int i = index; i < NewMatrix.GetLength(0); i++)
                 for (int j = 0; j < NewMatrix.GetLength(1); j++)
                     NewMatrix[i, j] = matrix[i + 1, j];
