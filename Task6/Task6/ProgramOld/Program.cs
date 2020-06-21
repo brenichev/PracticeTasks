@@ -10,13 +10,22 @@ namespace Task6
     public class Program
     {
         static double a1, a2, a3;
+        public static void Sequence(ref double[] a, int N, int last)
+        {
+            if (last < N)
+                a[last] = 13 * a[last - 1] - 10 * a[last - 2] + a[last - 3];
+            else
+                return;
+            last++;
+            Sequence(ref a, N, last);
+        }
 
-        public static double SequenceT(int k, double a1, double a2, double a3)
+        public static double SequenceT(int k)
         {
             if (k == 1) return a1;
             if (k == 2) return a2;
             if (k == 3) return a3;
-            return (13 * SequenceT(k - 1, a1, a2, a3) - 10 * SequenceT(k - 2, a1, a2, a3) + SequenceT(k - 3, a1, a2, a3));
+            return(13 * SequenceT(k - 1) - 10 * SequenceT(k - 2) + SequenceT(k - 3));
         }
 
         [ExcludeFromCodeCoverage]
@@ -69,6 +78,12 @@ namespace Task6
                 }
             } while (check != true);
 
+            a[0] = a1;
+            a[1] = a2;
+            a[2] = a3;
+            int last = 3;
+            Array.Resize(ref a, N);
+            Sequence(ref a, N, last);
             Console.WriteLine();
 
             int i = 1;
@@ -77,26 +92,24 @@ namespace Task6
             {
                 if (i + 2 < N)
                 {
-                    if (SequenceT(i, a1, a2, a3) > SequenceT(i + 2, a1, a2, a3))
+                    if (a[i] > a[i + 2])
                         grow = false;
                     i += 2;
                 }
                 else i = N;
             }
 
-            for (int w = 1; w <= N; w++)
+            int j = 0;
+            while(j < N && !double.IsNaN(a[j]))
             {
-                double temp = 0;
-                temp = SequenceT(w, a1, a2, a3);
-                if (!double.IsNaN(temp))
-                    Console.Write(SequenceT(w, a1, a2, a3) + " ");
-                else
-                {
-                    Console.WriteLine("Слишком большие значения в последовательности");
-                    w = N + 1;
-                }
+                Console.Write(a[j] + " ");
+                j++;
             }
-
+            Console.WriteLine("Слишком большие значения в последовательности");
+            if (double.IsNaN(a[j - 1]))
+                Console.WriteLine("Слишком большие значения в последовательности");
+            for (int w = 1; w <= N; w++)
+                Console.WriteLine(SequenceT(w));
             Console.WriteLine();
             if (grow)
                 Console.WriteLine("Элементы, стоящие на четных местах образуют возрастающую последовательность");

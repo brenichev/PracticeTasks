@@ -25,7 +25,7 @@ namespace Task4
                     xk = xi;
                 else
                     xn = xi;
-            } while (xk - xn > eps);
+            } while (Math.Abs(xk - xn) > eps);
             return xi;
         }
 
@@ -65,6 +65,12 @@ namespace Task4
                         Console.WriteLine("Введите положительное число");
                         check = false;
                     }
+                    if (eps == 0)
+                    {
+                        Console.WriteLine("Введите точность отличную от 0");
+                        check = false;
+                    }
+
                 } while (!check);
 
                 if (eps != -1)
@@ -73,21 +79,13 @@ namespace Task4
                     xn = 0;
                     xk = 2;
                     xi = 0;
-                    if (func(xn) == 0)
-                        Console.WriteLine("Корень уравнения = " + xn);
-                    else
-                    if (func(xk) == 0)
-                        Console.WriteLine("Корень уравнения = " + xk);
-                    else
-                    {
-                        
-                        xi = res(xn, xk, eps / 10);
-                        Console.WriteLine("Корень уравнения = " + MyRound(xi, eps) + " с точностью по y = " + eps + ", точное значение = " + xi);
-                    }
+                    xi = res(xn, xk, eps / 10);
+                    Console.WriteLine("Корень уравнения = " + MyRound(xi, eps) + " с точностью по y = " + eps + ", точное значение = " + xi);
+                    Console.WriteLine("Корень уравнения = {0:C4}", xi);
                 }
             } while (eps != -1);
         }
-        
+
         [ExcludeFromCodeCoverage]
         static void Main(string[] args)
         {

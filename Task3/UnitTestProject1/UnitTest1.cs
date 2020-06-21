@@ -30,11 +30,11 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestMethod3()
         {
-            var num = -1;
+            var num = 1;
 
             var res = Program.Function(num);
 
-            Assert.AreEqual(-1, res);
+            Assert.AreEqual(1, res);
         }
 
         [TestMethod]

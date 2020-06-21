@@ -12,7 +12,7 @@ namespace Task3
         public static double Function(double a)
         {
             if (a < 1)
-                return a;
+                return Math.Abs(a);
             else
                 if (a >= 1 && a <= 2)
                 return 1;
@@ -33,6 +33,7 @@ namespace Task3
             } while (!check);
 
             Console.WriteLine(Function(a));
+            Console.ReadLine();
         }
     }
 }

@@ -14,24 +14,24 @@ namespace Task11
         {
             Grid grid = new Grid();
 
-            /*grid.Str = "Это повторяется еще дважды. Таким образом, на бумагу наносится 100 букв текста. Решетку можно изобра";
+            grid.Str = "Это повторяется еще дважды. Таким образом, на бумагу наносится 100 букв текста. Решетку можно изобра";
             grid.Generate();
             Console.WriteLine();
-            grid.Test();
+            //grid.Test();
             grid.Encode();
             Console.WriteLine(grid.Str);
             Console.WriteLine();
             grid.Decode();
             Console.WriteLine(grid.Str);
-            Console.WriteLine();*/
+            Console.WriteLine();
             
-            grid = Grid.Read();
+            /*grid = Grid.Read();
 
             grid.Encode();
             Console.WriteLine(grid.Str);
             Console.WriteLine();
             grid.Decode();
-            Console.WriteLine(grid.Str);
+            Console.WriteLine(grid.Str);*/
         }
     }
 }

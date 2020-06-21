@@ -11,15 +11,12 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestMethod1()
         {
-            var arr = new double[] { 1, 2, 3 };
-            var last = 3;
-            var N = 4;
+            double a1 = 1, a2 = 2, a3 = 3;
+            int N = 9;
 
-            var expected = new double[] { 1, 2, 3, 20 };
-            Array.Resize(ref arr, N);
-            Program.Sequence(ref arr, N, last);
+            var expected = 5100538;
 
-            CollectionAssert.AreEqual(expected, arr);
+            Assert.AreEqual(expected, Program.SequenceT(N, a1, a2, a3));
         }
     }
 }
